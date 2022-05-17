@@ -3,11 +3,26 @@ import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, T
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useFetching} from "../hooks/useFetching";
 import PostService from "../API/PostService";
+import {getPosts, removePost} from "../asyncActions/posts";
+import {useDispatch, useSelector} from "react-redux";
 
-const PostList = ({id, title, description, setId, setTitle, setDescription, posts, setPosts}) => {
+const PostList = ({
+                      id,
+                      title,
+                      description,
+                      setId,
+                      setTitle,
+                      setDescription,
+                    //  setPosts
+}) => {
+
+    const dispatch = useDispatch()
+    const posts = useSelector(state => state.posts.posts)
 
     const [postToDeleteId, setPostToDeleteId] = useState(null);
     const [postToEditId, setPostToEditId] = useState(null);
+
+
 
     const [fetchDeletePost, isPostDeleteLoading, postDeleteError] = useFetching(async () => {
         await console.log("fetchDeletePost id: " + postToDeleteId)
@@ -27,9 +42,9 @@ const PostList = ({id, title, description, setId, setTitle, setDescription, post
         if (postToDeleteId !== null) {
             console.log("postDeleteHandle id: " + postToDeleteId)
             fetchDeletePost().then(
-                setPosts(posts.filter(post => {
-                    return post.id !== postToDeleteId
-                }))
+            //    setPosts(posts.filter(post => {
+           //         return post.id !== postToDeleteId
+          //      }))
             )
             console.log(posts)
         }
@@ -39,18 +54,22 @@ const PostList = ({id, title, description, setId, setTitle, setDescription, post
         if (id !== null) {
             console.log("postEditHandle id: " + id)
 
-            setPosts(posts.filter(post => {
-                    console.log({id, title, description})
-                    if (post.id !== id) return post
-                    else return {id, title, description}
-                })
-            )
+        //    setPosts(posts.filter(post => {
+          //          console.log({id, title, description})
+         //           if (post.id !== id) return post
+        //            else return {id, title, description}
+       //         })
+       //     )
             console.log(postToEditId)
         }
     }, [id])
 
+    useEffect( () => {
+        dispatch(getPosts())
+    }, [])
+
     const postDeleteHandle = (id) => {
-        setPostToDeleteId(id)
+        dispatch(removePost(id))
     }
     const postEditHandle = (id, title, description) => {
         setId(id)

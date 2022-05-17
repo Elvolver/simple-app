@@ -9,15 +9,15 @@ const Posts = () => {
     const [id, setId] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [posts, setPosts] = useState([])
+    //  const [posts, setPosts] = useState([])
 
     const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
         const response = await PostService.getAll();
-        setPosts(response.data)
+        //  setPosts(response.data)
     })
 
     useEffect(() => {
-        fetchPosts();
+        // fetchPosts();
     }, [])
 
 
@@ -26,12 +26,26 @@ const Posts = () => {
             <Grid item xs={10} md={12} lg={9}>
                 <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
                     <h1 align="center">Новый пост</h1>
-                    <PostForm id={id} title={title} description={description} setId={setId} setTitle={setTitle} setDescription={setDescription} setPosts={setPosts} posts={posts}/>
+                    <PostForm id={id} title={title}
+                              description={description}
+                              setId={setId}
+                              setTitle={setTitle}
+                              setDescription={setDescription}
+                          //    setPosts={setPosts}
+                            //  posts={posts}
+                    />
                     {(isPostsLoading && !postError)
                         ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
                             <h1>LOADING...</h1>
                         </div>
-                        : <PostList id={id} title={title} description={description} setId={setId} setTitle={setTitle} setDescription={setDescription} posts={posts} setPosts={setPosts}/>
+                        : <PostList id={id} title={title}
+                                    description={description}
+                                    setId={setId}
+                                    setTitle={setTitle}
+                                    setDescription={setDescription}
+                                   // posts={posts}
+                                  //  setPosts={setPosts}
+                        />
                     }
                 </Paper>
             </Grid>
