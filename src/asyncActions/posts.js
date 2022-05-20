@@ -1,4 +1,4 @@
-import {getPostsAction, removePostAction} from "../store/postReducer";
+import {addPostAction, getPostsAction, removePostAction} from "../store/postReducer";
 import PostService from "../API/PostService";
 
 export const getPosts = () => {
@@ -12,5 +12,12 @@ export const removePost = (id) => {
     return dispatch => {
         PostService.delete(id)
             .then(() => dispatch(removePostAction(id)))
+    }
+}
+
+export const addPost = (post) => {
+    return dispatch => {
+        PostService.post(post)
+            .then(() => dispatch(addPostAction(post)))
     }
 }
