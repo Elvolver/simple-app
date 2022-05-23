@@ -6,6 +6,7 @@ import PostService from "../API/PostService";
 import {addPost, getPosts, removePost} from "../asyncActions/posts";
 import {useDispatch, useSelector} from "react-redux";
 import {setPostAction} from "../store/postFormReducer";
+import {postLoadAction} from "../store/reduxPostFormReduser";
 
 const PostList = () => {
 
@@ -21,7 +22,8 @@ const PostList = () => {
     }
     const postEditHandle = (id, title, description) => {
         const post = {"id": id, "title": title, "description": description}
-        dispatch(setPostAction(post))
+        console.log("postEditHandle")
+        dispatch(postLoadAction(post))
     }
     if (!posts.length) {
         return <h1 style={{textAlign: 'center'}}>Посты не найдены</h1>

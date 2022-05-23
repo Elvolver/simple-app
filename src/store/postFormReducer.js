@@ -10,6 +10,7 @@ const CLEAR_POST_FORM = "CLEAR_POST_FORM"
 export const postFormReducer = (state = defaultState, action) => {
     switch (action.type) {
         case SET_POST:
+            console.log(action.payload)
             return action.payload
         case SET_POST_ID:
             return {...state, id: action.payload}
@@ -18,7 +19,8 @@ export const postFormReducer = (state = defaultState, action) => {
         case SET_POST_DESCRIPTION:
             return {...state, description: action.payload}
         case CLEAR_POST_FORM:
-            return defaultState
+            console.log('qwe')
+            return {}
         default:
             return state
     }

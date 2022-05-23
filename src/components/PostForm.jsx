@@ -1,8 +1,12 @@
 import React from 'react';
-import {Box, Button, Container, TextField} from "@mui/material";
+import {Container} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {clearPostFormAction, setPostDescriptionAction, setPostTitleAction} from "../store/postFormReducer";
-import {addPostAction, editPostAction} from "../store/postReducer";
+import {setPostDescriptionAction, setPostTitleAction} from "../store/postFormReducer";
+import {addPost, editPost} from "../asyncActions/posts";
+import {reset} from "redux-form";
+import ReduxPostForm from "./simpleForm";
+import {clearPostFormAction} from "../store/reduxPostFormReduser";
+import InitializeFromStateForm from "./simpleForm";
 
 const PostForm = () => {
     const dispatch = useDispatch()
@@ -23,41 +27,37 @@ const PostForm = () => {
     const postSaveHandle = (e) => {
         e.preventDefault();
         console.log("id  :  " + post.id)
-        if (post.id === null) {
-            dispatch(addPostAction(post))
+        if (post.id === null || post.id === undefined) {
+            console.log(post)
+            dispatch(addPost(post))
         } else {
-            dispatch(editPostAction(post))
+            dispatch(editPost(post))
         }
         dispatch(clearPostFormAction())
     }
 
+    const handleSubmit = (post) => {
+        console.log(post)
+        if (post.id === null || post.id === undefined) {
+            console.log(post)
+            dispatch(addPost(post))
+        } else {
+            dispatch(editPost(post))
+        }
+        dispatch(reset("ordersTradesSearchForm"));
+        dispatch(clearPostFormAction())
+    }
+
+    const submit = values => {
+        // print the form values to the console
+        console.log(values)
+
+    }
 
     return (
 
         <Container maxWidth="sm" fixed>
-
-
-            <Box m={2}>
-                <TextField fullWidth
-                           id="outlined-name"
-                           label="Название"
-                           value={post.title}
-                           onChange={e => handleChangeTitle(e)}
-                           aria-label={post.title}
-                />
-            </Box>
-            <Box m={2}>
-                <TextField fullWidth
-                           id="outlined-name"
-                           label="Описание"
-                           value={post.description}
-                           onChange={e => handleChangeDescription(e)}
-                           aria-label={post.description}
-                />
-            </Box>
-            <Box m={2}>
-                <Button fullWidth variant="contained" onClick={e => postSaveHandle(e)}>Сохранить</Button>
-            </Box>
+            <InitializeFromStateForm onSubmit={handleSubmit}/>
         </Container>
     );
 };

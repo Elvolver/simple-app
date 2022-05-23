@@ -8,16 +8,15 @@ const REMOVE_POST = "REMOVE_POST"
 export const postReducer = (state = defaultState, action) => {
     switch (action.type) {
         case ADD_POST:
-            return {...state, ...action.payload}
+            return [...state, action.payload]
         case EDIT_POST:
             console.log(EDIT_POST)
 
             return state.map(
-                    post => post.id === action.payload.id ? action.payload : post
+                    post => post.id === action.payload.id ? {...post, title: action.payload.title, description: action.payload.description} : post
                 )
-
         case GET_POSTS:
-            return {...action.payload}
+            return [...action.payload]
         case REMOVE_POST:
             return state.filter(post => post.id !== action.payload)
         default:
