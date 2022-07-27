@@ -1,87 +1,141 @@
-import {Field, reduxForm} from "redux-form";
-import {alphaNumeric, maxLength, required} from "../utils/validators/validators";
-import {connect} from "react-redux";
-import {clearPostFormAction, postLoadAction} from "../store/reduxPostFormReduser";
+import {addPost, editPost} from "../asyncActions/posts";
+import {clearPostFormAction} from "../store/postFormReduser";
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import {Form} from 'react-final-form';
+import {TextField} from 'mui-rff';
 
-const maxLength10 = maxLength(10)
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogContent from '@mui/material/DialogContent';
+import { ARRAY_ERROR } from 'final-form'
+import {Button, Grid} from "@mui/material";
 
 
+let SimplePostForm = (props) => {
+    const dispatch = useDispatch()
+    const post = useSelector(state => state.post.data)
 
-const renderField = ({
-                         input,
-                         label,
-                         type,
-                         meta: {touched, error, warning}
-                     }) => (
-    <div>
-        <label>{label}</label>
-        <div>
-            <input {...input} placeholder={label} type={type}/>
-            {touched &&
-                ((error && <span>{error}</span>) ||
-                    (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-)
-const data = {
-    // used to populate "account" reducer when "Load" is clicked
-    title: 'Jane',
-    description: 'Doe',
+    useEffect(() => {
+    }, [post])
 
-};
-const colors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'];
+    const validate = values => {
+        const errors = {post: {}};
+        if (values && values.post && !values.post.title) {
+            errors.post.title = 'Обязательное';
+        }
+        if (values && values.post && !values.post.description) {
+            errors.post.description = 'Обязательное';
+        }
 
-let InitializeFromStateForm = props => {
-    const { handleSubmit, load, pristine, reset, submitting } = props;
-    return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <button type="button" onClick={() => load(data)}>Load Account</button>
-            </div>
-            <div>
-                <label>Title</label>
-                <div>
-                    <Field
-                        name="title"
-                        component="input"
-                        type="text"
-                        placeholder="Title"
-                    />
-                </div>
-            </div>
-            <div>
-                <label>Description</label>
-                <div>
-                    <Field
-                        name="description"
-                        component="input"
-                        type="text"
-                        placeholder="Description"
-                    />
-                </div>
-            </div>
+        return errors;
+    };
 
-            <div>
-                <button type="submit" disabled={pristine || submitting}>Submit</button>
-                <button type="button" disabled={pristine || submitting} onClick={reset}>
-                    Undo Changes
-                </button>
-            </div>
-        </form>
-    );
-};
+    const formFields = [
+        {
+            size: 12,
+            field: (
+                <TextField
+                    autoFocus
+                    label="Заголовок"
+                    id="post.title"
+                    name="post.title"
+                    type="text"
+                    margin="dense"
+                    fullWidth
+                    variant="standard"
+                    required={true}
+                />
+            ),
+        },
+        {
+            size: 12,
+            field: (
+                <TextField
+                    label="Описание"
+                    id="post.description"
+                    name="post.description"
+                    type="text"
+                    margin="dense"
+                    fullWidth
+                    variant="standard"
+                    required={true}
+                />
+            ),
+        }
+    ]
+    console.log(post)
 
-// Decorate with reduxForm(). It will read the initialValues prop provided by connect()
-InitializeFromStateForm = reduxForm({
-    form: 'initializeFromState', // a unique identifier for this form
-})(InitializeFromStateForm);
 
-// You have to connect() to any reducers that you wish to connect to yourself
-InitializeFromStateForm = connect(
-    state => ({
-        initialValues: state.account.data, // pull initial values from account reducer
-    }),
-    { load: postLoadAction, clear: clearPostFormAction }, // bind account loading action creator
-)(InitializeFromStateForm);
+    return <Form
+        initialValues={post}
+        validate={validate}
+        onSubmit={(values, form) => {
+            console.log("asd")
+            const post = values.post
+            if (post && (post.id === null || post.id === undefined)) {
+                console.log(post)
+                dispatch(addPost(post))
+            } else {
+                dispatch(editPost(post))
+            }
 
-export default InitializeFromStateForm
+            console.log(ARRAY_ERROR)
+            props.handleClose()
+
+            dispatch(clearPostFormAction())
+            form.resetFieldState('post.title')
+            form.resetFieldState('post.description');
+        }}
+        clearForm={() => {
+            props.handleClose()
+        }}
+
+        render={({handleSubmit, pristine, form, submitting, values, clearForm}) => (
+            <form onSubmit={handleSubmit} noValidate>
+                <DialogContent>
+
+                    <Grid container alignItems="flex-start" spacing={2}>
+                        {formFields.map((item, idx) => (
+                            <Grid item xs={item.size} key={idx}>
+                                {item.field}
+                            </Grid>
+                        ))}
+                        <Grid item style={{marginTop: 16}}>
+
+                        </Grid>
+                        <Grid item style={{marginTop: 16}}>
+
+
+                        </Grid>
+                    </Grid>
+                    <DialogContentText>
+                        Напишите что-нибудь.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button
+                        type="button"
+                        variant="contained"
+                        onClick={form => clearForm(form)}
+                        disabled={submitting}
+                    >
+                        Отмена
+                    </Button>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                        disabled={submitting}
+                    >
+                        Сохранить
+                    </Button>
+                </DialogActions>
+
+            </form>
+
+        )}
+    />
+}
+
+export default SimplePostForm

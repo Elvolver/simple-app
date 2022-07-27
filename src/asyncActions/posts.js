@@ -1,6 +1,7 @@
 import {addPostAction, editPostAction, getPostsAction, removePostAction} from "../store/postReducer";
 import PostService from "../API/PostService";
 
+
 export const getPosts = () => {
     return dispatch => {
         PostService.getAll()
@@ -16,6 +17,7 @@ export const removePost = (id) => {
 }
 
 export const addPost = (post) => {
+    console.log(post)
     return dispatch => {
         PostService.post(post)
             .then((response) => {

@@ -1,52 +1,52 @@
-import React, {useEffect, useState} from 'react';
-import {Grid, Paper} from "@mui/material";
-import PostService from "../API/PostService";
-import {useFetching} from "../hooks/useFetching";
+import React, {useState} from 'react';
+import {Button, Grid, Paper} from "@mui/material";
 import PostList from "../components/PostList";
-import PostForm from "../components/PostForm";
+import SimplePostForm from "../components/simpleForm";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 const Posts = () => {
     const [id, setId] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    //  const [posts, setPosts] = useState([])
 
-    const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-        const response = await PostService.getAll();
-        //  setPosts(response.data)
-    })
+    const [open, setOpen] = React.useState(false);
 
-    useEffect(() => {
-        // fetchPosts();
-    }, [])
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <div>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Новый пост</DialogTitle>
+                <SimplePostForm handleClose={handleClose}/>
+            </Dialog>
+
             <Grid item xs={10} md={12} lg={9}>
                 <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-                    <h1 align="center">Новый пост</h1>
-                    <PostForm id={id} title={title}
-                              description={description}
-                              setId={setId}
-                              setTitle={setTitle}
-                              setDescription={setDescription}
-                          //    setPosts={setPosts}
-                            //  posts={posts}
-                    />
-                    {(isPostsLoading && !postError)
-                        ? <div style={{display: 'flex', justifyContent: 'center', marginTop: 50}}>
-                            <h1>LOADING...</h1>
-                        </div>
-                        : <PostList id={id} title={title}
-                                    description={description}
-                                    setId={setId}
-                                    setTitle={setTitle}
-                                    setDescription={setDescription}
-                                   // posts={posts}
-                                  //  setPosts={setPosts}
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <h1 align="left">Список постов</h1>
+                        </Grid>
+                        <Grid item xs={4}>
+                        <Button variant={'contained'} xs={2} md={2} lg={2}
+                        onClick={handleClickOpen}>
+                            Добавить
+                        </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+
+
+                        <PostList handleClickOpen={handleClickOpen}
                         />
-                    }
+                        </Grid>
+                    </Grid>
                 </Paper>
             </Grid>
 

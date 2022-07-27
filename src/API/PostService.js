@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://localhost:8080/posts'
+const baseUrl = 'http://176.108.144.139:8080/posts'
 
 export default class PostService {
 

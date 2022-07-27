@@ -11,7 +11,6 @@ export const postReducer = (state = defaultState, action) => {
             return [...state, action.payload]
         case EDIT_POST:
             console.log(EDIT_POST)
-
             return state.map(
                     post => post.id === action.payload.id ? {...post, title: action.payload.title, description: action.payload.description} : post
                 )
