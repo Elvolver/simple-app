@@ -36,6 +36,7 @@ const PostList = (props) => {
                         <TableCell align="left">#</TableCell>
                         <TableCell align="left">Название</TableCell>
                         <TableCell align="left">Описание</TableCell>
+                        <TableCell align="left">Автор</TableCell>
                         <TableCell align="left"></TableCell>
                         <TableCell align="left"></TableCell>
 
@@ -50,6 +51,7 @@ const PostList = (props) => {
                                 <TableCell align="left">{post.id}</TableCell>
                                 <TableCell align="left">{post.title}</TableCell>
                                 <TableCell align="left">{post.description}</TableCell>
+                                <TableCell align="left">{post.author && post.author.userProfile ? `${post.author.userProfile.firstName} ${post.author.userProfile.lastName}` : "=)"}</TableCell>
                                 <TableCell align="center" width={40} m={0} p={0}>
                                     <Button onClick={() => postEditHandle(post.id, post.title, post.description)}
                                             variant="outlined"

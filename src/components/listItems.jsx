@@ -9,14 +9,17 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import {Link} from "react-router-dom";
+import SignUp from "../pages/SignUp";
+import {logout} from "../asyncActions/auth";
 
 export const mainListItems = (
     <React.Fragment>
         <ListItemButton>
             <ListItemIcon>
-                <DashboardIcon />
+                <DashboardIcon/>
             </ListItemIcon>
-            <ListItemText primary="Список дел" />
+            <ListItemText primary="Список дел"/>
         </ListItemButton>
 
     </React.Fragment>
@@ -27,23 +30,29 @@ export const secondaryListItems = (
         <ListSubheader component="div" inset>
             Навигация
         </ListSubheader>
-        <ListItemButton>
-            <ListItemIcon>
-                <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="1 элемент" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="2 элемент" />
-        </ListItemButton>
-        <ListItemButton>
-            <ListItemIcon>
-                <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="3 элемент" />
-        </ListItemButton>
+        <Link to="/signup">
+            <ListItemButton>
+                <ListItemIcon>
+                    <AssignmentIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Sign up"/>
+            </ListItemButton>
+        </Link>
+        <Link to="/posts">
+            <ListItemButton>
+                <ListItemIcon>
+                    <AssignmentIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Посты"/>
+            </ListItemButton>
+        </Link>
+        <Link to="/users/profile">
+            <ListItemButton>
+                <ListItemIcon>
+                    <AssignmentIcon/>
+                </ListItemIcon>
+                <ListItemText primary="Моя страница"/>
+            </ListItemButton>
+        </Link>
     </React.Fragment>
 );
